@@ -1,6 +1,4 @@
 <?php 
-require __DIR__.'/model.php';
-$model = new Model();
-$products = $model->getData();
-require __DIR__.'/view.php';
-?>
+    require __DIR__.'/controller.php';
+    $controller = new Controller();
+    $controller->index();

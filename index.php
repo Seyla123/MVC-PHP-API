@@ -1,4 +1,11 @@
 <?php 
     require "src/controllers/products.php";
     $controller = new Products();
-    $controller->index();
+
+    $action = $GET["action"]??"index";
+
+    if($action == 'show') {
+        $controller->show();
+    }else{
+        $controller->index();
+    }

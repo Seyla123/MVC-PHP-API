@@ -7,6 +7,6 @@ class Products
         require "src/models/product.php";
         $model = new Product();
         $products = $model->getData();
-        require "./view.php";
+        require "src/views/products_index.php";
     }
 }

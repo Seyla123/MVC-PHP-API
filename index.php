@@ -7,7 +7,22 @@ $pdo = new PDO($dsn, 'product_db_user', 'Seyla758@',[
 ]);
 
 $stmt = $pdo->query("SELECT * FROM product");
-$pruducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-print_r($pruducts);
+print_r($products);
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC CRUD PROJECT</title>
+</head>
+<body>
+    <h1>Products</h1>
+    <?php foreach ($products as $product): ?>
+        <h2><?=htmlspecialchars($product['name'])?></h2>
+        <p><?=htmlspecialchars($product['description'])?></p>
+    <?php endforeach; ?>
+</body>
+</html>

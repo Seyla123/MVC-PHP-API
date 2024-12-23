@@ -1,10 +1,11 @@
 <?php
 namespace App\controllers;
+use App\Models\Product;
 class Products 
 {
     public function index(): void
     {
-        $model = new \App\Models\Product;
+        $model = new Product;
         $products = $model->getData();
         require "src/views/products_index.php";
     }

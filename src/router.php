@@ -10,8 +10,13 @@ class Router
             "params" => $params
         ];
     }
-    public function getRoutes():array
+    public function match(string $path):array|bool
     {
-        return $this->routes;
+        foreach ($this->routes as $route) {
+            if ($route["path"] === $path) {
+                return $route["params"];
+            }
+        }
+        return false;
     }
 }

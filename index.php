@@ -6,9 +6,9 @@
 
     $router = new Router();
     $router->add("/", ["controller" => "Home", "action" => "index"]);
-    $router->add("/home", ["controller" => "Home", "action" => "index"]);
+    $router->add("/home/index", ["controller" => "Home", "action" => "index"]);
     $router->add("/products", ["controller" => "Products", "action" => "index"]);
-    $routes = $router->getRoutes();
+    $routes = $router->match($path);
     var_dump($routes);
     exit;
    

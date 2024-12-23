@@ -10,7 +10,9 @@
     $router->add("/products", ["controller" => "Products", "action" => "index"]);
     $params = $router->match($path);
 
-    $segments = explode("/", $path);
+    if($params === false){
+        exit("404, No route matched.");
+    }
 
     $action = $params["action"];
     $controller = $params["controller"];

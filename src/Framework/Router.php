@@ -31,7 +31,10 @@ class Router
         $segments = array_map(function(string $segments):string
         {
             if(preg_match("#^\{([a-z][a-z0-9]*)\}$#", $segments, $matches)){
-                $segments = "(?<" . $matches[1] . ">[a-z]+)";
+                return "(?<" . $matches[1] . ">[^/]*)";
+            }
+            if(preg_match("#^\{([a-z][a-z0-9]*):(.+)\}$#", $segments, $matches)){
+                return "(?<" . $matches[1] . ">" . $matches[2] . ")";
             }
             return $segments;
         }, $segments);

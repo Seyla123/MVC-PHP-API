@@ -39,7 +39,7 @@ class Router
             return $segments;
         }, $segments);
         
-        $pattern = "#^". implode("/", $segments) . "$#";
+        $pattern = "#^". implode("/", $segments) . "$#i";
         return $pattern;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-
+namespace App\controllers;
 class Products 
 {
     public function index(): void

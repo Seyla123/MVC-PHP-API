@@ -13,8 +13,9 @@ class Router
     }
     public function match(string $path):array|bool
     {
-        $pattern = "#^/home/index$#";
-        if(preg_match($pattern, $path)){
+        $pattern = "#^/([a-z]+)/([a-z]+)$#";
+        if(preg_match($pattern, $path, $matches)){
+            print_r($matches);
             exit("Matched");
         }
         foreach ($this->routes as $route) {

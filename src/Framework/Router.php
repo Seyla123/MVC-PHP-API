@@ -35,6 +35,7 @@ class Router
             return $segments;
         }, $segments);
         
-        print_r($segments);
+        $pattern = "#^". implode("/", $segments) . "$#";
+       echo $pattern, "\n";
     }
 }

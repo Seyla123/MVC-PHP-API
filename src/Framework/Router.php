@@ -13,10 +13,9 @@ class Router
     }
     public function match(string $path):array|bool
     {
+        $path = trim($path,"/");
         foreach($this->routes as $route){
-            $pattern = "#^/(?<controller>[a-z]+)/(?<action>[a-z]+)$#";
-            echo $pattern, "\n", $route["path"], "\n";
-            $this->getPatternFromRoutePath($route["path"]);
+            $pattern = $this->getPatternFromRoutePath($route["path"]);
             if(preg_match($pattern, $path, $matches)){
                 $matches = array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
                 return $matches;
@@ -36,6 +35,6 @@ class Router
         }, $segments);
         
         $pattern = "#^". implode("/", $segments) . "$#";
-       echo $pattern, "\n";
+        return $pattern;
     }
 }

@@ -13,7 +13,7 @@ class Router
     }
     public function match(string $path):array|bool
     {
-        $pattern = "#home/index#";
+        $pattern = "#^/home/index$#";
         if(preg_match($pattern, $path)){
             exit("Matched");
         }

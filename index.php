@@ -15,17 +15,19 @@
     set_exception_handler(function (Throwable $exception){
         if($exception instanceof \Framework\Exceptions\PageNotFoundException){
             http_response_code(404);
+            $template = "404.php";
         }else{
             http_response_code(500);
+            $template = "500.php";
         }
-        $show_error = true;
+        $show_error = false;
     
         if($show_error){
             ini_set("display_errors", "1");
         }else{
             ini_set("display_errors", "0");
             ini_set("log_errors", "1");
-            require "src/views/500.php";
+            require "src/views/$template";
         }
         throw $exception;
     });

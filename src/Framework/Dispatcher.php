@@ -3,7 +3,6 @@
 namespace Framework;
 use ReflectionMethod;
 use ReflectionClass;
-use App\Models\Product;
 
 class Dispatcher
 {
@@ -27,11 +26,11 @@ class Dispatcher
         if($contructor !== null){
             foreach($contructor->getParameters() as $parameter){
                 $type = (string) $parameter->getType();
-                var_dump($type); 
+                $dependencies[] = new $type;
             }
         }
 
-        $controller_object = new $controller(new Viewer, new Product);
+        $controller_object = new $controller(...$dependencies);
         
         $args = $this->getActionArguments($controller, $action, $params);
 

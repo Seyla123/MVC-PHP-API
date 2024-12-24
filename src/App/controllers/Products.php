@@ -11,7 +11,7 @@ class Products
         $products = $model->getData();
 
         $viewer = new Viewer;
-        $viewer->render("products_index.php", [
+        echo $viewer->render("products_index.php", [
             "products"=> $products
         ]);
     }

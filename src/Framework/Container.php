@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Framework;
 
 use Closure;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -27,15 +28,15 @@ class Container
         foreach($contructor->getParameters() as $parameter){
             $type = $parameter->getType();
             if($type === null){
-                exit("Contructor parameter '{$parameter->getName()}' in the $class_name class has no type declaration.");
+                throw new InvalidArgumentException("Contructor parameter '{$parameter->getName()}' in the $class_name class has no type declaration.");
             }
 
             if(!$type instanceof ReflectionNamedType){
-                exit("Contructor parameter '{$parameter->getName()}' in the $class_name class has invalid type: $type - only single named types supported.");
+                throw new InvalidArgumentException("Contructor parameter '{$parameter->getName()}' in the $class_name class has invalid type: $type - only single named types supported.");
             }
 
             if($type->isBuiltin()){
-                exit("Unable to resolve contructor parameters
+                throw new InvalidArgumentException("Unable to resolve contructor parameters
                 '{$parameter->getName()}'
                 of type '{$type}' in the $class_name class.");
             }

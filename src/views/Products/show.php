@@ -1,0 +1,1 @@
+show induavidual products, with ID <?= $id?>

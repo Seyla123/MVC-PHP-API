@@ -1,6 +1,15 @@
 <?php 
 
     declare(strict_types=1);
+
+    $show_error = true;
+
+    if($show_error){
+        ini_set("display_errors", "1");
+    }else{
+        ini_set("display_errors", "0");
+    }
+
     
     $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 

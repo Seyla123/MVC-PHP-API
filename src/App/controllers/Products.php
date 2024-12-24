@@ -1,12 +1,16 @@
 <?php
 namespace App\controllers;
 use App\Models\Product;
+use Framework\Viewer;
+
 class Products 
 {
     public function index(): void
     {
         $model = new Product;
         $products = $model->getData();
+
+        $viewer = new Viewer;
         require "src/views/products_index.php";
     }
     public function show(string $id): void

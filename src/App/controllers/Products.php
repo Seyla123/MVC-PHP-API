@@ -16,6 +16,6 @@ class Products
     }
     public function showPage(string $title, string $id, string $page )
     {
-       
+       echo $title, " " , $id," ", $page;
     }
 }

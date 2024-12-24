@@ -21,17 +21,20 @@ class Dispatcher
 
         $controller_object = new $controller;
         
-        $this->getActionArguments($controller, $action, $params);
+        $args = $this->getActionArguments($controller, $action, $params);
 
-        $controller_object->$action();
+        $controller_object->$action(...$args);
     }
-    private function getActionArguments(string $controller, string $action, array $params )
+    private function getActionArguments(string $controller, string $action, array $params ):array
     {
+        $args = [];
+
         $method = new ReflectionMethod($controller, $action);
 
         foreach($method->getParameters() as $parameter){
-         $name = $parameter->getName();
-         echo $name . " = " . $params[$name] . ", ";   
+            $name = $parameter->getName();
+            $args[$name] = $params[$name];
         }
+        return $args;
     }
 }

@@ -2,12 +2,13 @@
 
     declare(strict_types=1);
 
-    $show_error = true;
+    $show_error = false;
 
     if($show_error){
         ini_set("display_errors", "1");
     }else{
         ini_set("display_errors", "0");
+        require "src/views/500.php";
     }
 
     

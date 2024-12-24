@@ -28,9 +28,8 @@ class ErrorHandler
             http_response_code(500);
             $template = "500.php";
         }
-        $show_error = true;
-    
-        if($show_error){
+        
+        if($_ENV["SHOW_ERRORS"]){	
             ini_set("display_errors", "1");
         }else{
             ini_set("display_errors", "0");

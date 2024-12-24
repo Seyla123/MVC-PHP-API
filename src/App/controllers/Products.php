@@ -11,7 +11,7 @@ class Products
         $products = $model->getData();
 
         $viewer = new Viewer;
-        require "src/views/products_index.php";
+        $viewer->render("products_index.php", $products);
     }
     public function show(string $id): void
     {

@@ -2,15 +2,11 @@
 
     declare(strict_types=1);
 
-    set_error_handler(function(
-        int $errno,
-        string $errstr,
-        string $errfile,
-        int $errline
-    ):bool
-    {
-        throw new ErrorException($errstr, 0 , $errno, $errfile, $errline);
+    spl_autoload_register(function ($class_name){
+        require "src/" . str_replace("\\", "/", $class_name). ".php";
     });
+
+    set_error_handler("Framework\ErrorHandler::handleError");
 
     set_exception_handler(function (Throwable $exception){
         if($exception instanceof \Framework\Exceptions\PageNotFoundException){
@@ -20,7 +16,7 @@
             http_response_code(500);
             $template = "500.php";
         }
-        $show_error = false;
+        $show_error = true;
     
         if($show_error){
             ini_set("display_errors", "1");
@@ -39,9 +35,7 @@
                                             '{$_SERVER['REQUEST_URI']}'");
     }
 
-    spl_autoload_register(function ($class_name){
-        require "src/" . str_replace("\\", "/", $class_name). ".php";
-    });
+
 
     $router = new Framework\Router;
 

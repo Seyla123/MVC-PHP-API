@@ -1,12 +1,11 @@
 <?php
-
+declare(strict_types=1);
 namespace Framework;
 use ReflectionMethod;
-use ReflectionClass;
 
 class Dispatcher
 {
-    public function __construct(private Router $router)
+    public function __construct(private Router $router, private Container $container)
     {
     }
     public function handle(string $path)
@@ -20,7 +19,7 @@ class Dispatcher
         $action = $this->getActionName($params);
         $controller = $this->getControllerName($params);
 
-        $controller_object = $this->getObject($controller);
+        $controller_object = $this->container->get($controller);
         
         $args = $this->getActionArguments($controller, $action, $params);
 
@@ -59,19 +58,5 @@ class Dispatcher
         $action = lcfirst(str_replace("-", "", ucwords(strtolower($action), "-")));
 
         return $action;
-    }
-    private function getObject(string $class_name): object
-    {
-        $reflection = new ReflectionClass($class_name);
-        $contructor = $reflection->getConstructor();
-
-        if($contructor === null){
-            return new $class_name;
-        }
-        foreach($contructor->getParameters() as $parameter){
-            $type = (string) $parameter->getType();
-            $dependencies[] = $this->getObject($type);
-        }
-        return new $class_name(...$dependencies);
     }
 }

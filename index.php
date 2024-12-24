@@ -6,8 +6,7 @@
         require "src/" . str_replace("\\", "/", $class_name). ".php";
     });
 
-    $router = new Framework\Router();
-
+    $router = new Framework\Router;
     $router->add("/{title}/{id:\d+}/{page:\d+}", ["controller" => "products", "action" => "showPage"]);
     $router->add("/product/{slug:[\w-]+}", ["controller" => "products", "action" => "show"]);
     $router->add("/{controller}/{id:\d+}/{action}");

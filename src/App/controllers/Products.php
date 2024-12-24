@@ -11,7 +11,9 @@ class Products
         $products = $model->getData();
 
         $viewer = new Viewer;
-        $viewer->render("products_index.php", $products);
+        $viewer->render("products_index.php", [
+            "products"=> $products
+        ]);
     }
     public function show(string $id): void
     {

@@ -6,6 +6,17 @@ use App\Database;
 abstract class Model
 {
     protected $table;
+    protected array $errors = [];
+    protected function validate(array $data): void {}
+
+    protected function addError(string $field, string $message): void
+    {
+       $this->errors[$field] = $message;
+    }
+    public function getErrors(): array
+    {
+       return $this->errors;
+    }
     private function getTable():string
     {
         if($this->table !== null) return $this->table;
@@ -33,8 +44,10 @@ abstract class Model
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function insert(array $data): bool
-    {
-        if(!$this->validate($data)){
+    {   
+        $this->validate($data);
+
+        if(!empty($this->errors)) {
             return false;
         };
         $columns = implode(", ", array_keys($data));

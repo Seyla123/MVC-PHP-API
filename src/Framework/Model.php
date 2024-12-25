@@ -43,9 +43,19 @@ abstract class Model
         $conn = $this->database->getConnection();
         $stmt = $conn->prepare($sql);
 
-        $stmt->bindValue(1, $data["name"], PDO::PARAM_STR);
-        $stmt->bindValue(2, $data["description"], PDO::PARAM_STR);
+        $i=1;
 
+        foreach($data as $value) {
+            $type = match(gettype($value)) {
+                "NULL" => PDO::PARAM_NULL,
+                "integer" => PDO::PARAM_INT,
+                "boolean" => PDO::PARAM_BOOL,
+                default => PDO::PARAM_STR
+            };
+            $stmt->bindValue($i, $value, $type);
+            $i++;
+        }
+        
         return $stmt->execute();
     }
 }

@@ -32,4 +32,15 @@ abstract class Model
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function insert(array $data): bool
+    {
+        $conn = $this->database->getConnection();
+        $sql = "INSERT INTO {$this->getTable()} (name, description) VALUES (:name, :description)";
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindValue(":name", $data["name"], PDO::PARAM_STR);
+        $stmt->bindValue(":description", $data["description"], PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
 }

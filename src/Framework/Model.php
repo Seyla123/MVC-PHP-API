@@ -8,6 +8,11 @@ abstract class Model
     protected $table;
     protected array $errors = [];
     protected function validate(array $data): void {}
+    public function getInsertID():string 
+    {
+        $conn = $this->database->getConnection();
+        return $conn->lastInsertId();
+    }
 
     protected function addError(string $field, string $message): void
     {

@@ -8,6 +8,15 @@ abstract class Model
     protected $table;
     protected array $errors = [];
     protected function validate(array $data): void {}
+    public function update(string $id, array $data): bool 
+    {
+        $this->validate($data);
+
+        if(!empty($this->errors)) {
+            return false;
+        };
+        return true;
+    }
     public function getInsertID():string 
     {
         $conn = $this->database->getConnection();

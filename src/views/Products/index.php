@@ -1,8 +1,7 @@
 
     <h1>Products</h1>
     <?php foreach ($products as $product): ?>
-        <h2><?=htmlspecialchars($product['name'])?></h2>
-        <p><?=htmlspecialchars($product['description'])?></p>
+        <a href="/products/<?= $product['id'] ?>/show"><?=htmlspecialchars($product['name'])?></a>
     <?php endforeach; ?>
 </body>
 </html>

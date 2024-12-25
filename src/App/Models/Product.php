@@ -16,7 +16,7 @@ class Product
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $products;
     }
-    public function find(string $id): array
+    public function find(string $id): array|bool
     {
         $conn = $this->database->getConnection();
         $stmt = $conn->prepare("SELECT * FROM product WHERE id = :id");

@@ -1,69 +1,71 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\controllers;
+
 use App\Models\Product;
 use Framework\Viewer;
 use Framework\Exceptions\PageNotFoundException;
 
-class Products 
+class Products
 {
-    public function __construct(private Viewer $viewer, private Product $model){}
+    public function __construct(private Viewer $viewer, private Product $model) {}
     public function index(): void
     {
         $products = $this->model->findAll();
 
-        echo $this->viewer->render("shared/header.php",[
+        echo $this->viewer->render("shared/header.php", [
             "title" => "Products"
         ]);
         echo $this->viewer->render("Products/index.php", [
-            "products"=> $products,
-            "total"=> $this->model->getTotal()
+            "products" => $products,
+            "total" => $this->model->getTotal()
         ]);
     }
     public function show(string $id): void
     {
         $product = $this->model->find($id);
 
-        if(!$product) {
+        if (!$product) {
             throw new PageNotFoundException("Product with id '$id' not found.");
         }
 
-        echo $this->viewer->render("shared/header.php",[
+        echo $this->viewer->render("shared/header.php", [
             "title" => "Products"
         ]);
         echo $this->viewer->render("Products/show.php", [
-            "product"=> $product
+            "product" => $product
         ]);
     }
     public function edit(string $id): void
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render("shared/header.php",[
+        echo $this->viewer->render("shared/header.php", [
             "title" => "Edit Products"
         ]);
         echo $this->viewer->render("Products/edit.php", [
-            "product"=> $product
+            "product" => $product
         ]);
     }
     private function getProduct(string $id): array
     {
         $product = $this->model->find($id);
 
-        if(!$product) {
+        if (!$product) {
             throw new PageNotFoundException("Product with id '$id' not found.");
         }
 
         return $product;
     }
-    public function showPage(string $title, string $id, string $page )
+    public function showPage(string $title, string $id, string $page)
     {
-       echo $title, " " , $id," ", $page;
+        echo $title, " ", $id, " ", $page;
     }
     public function new()
     {
-        echo $this->viewer->render("shared/header.php",[
+        echo $this->viewer->render("shared/header.php", [
             "title" => "New Product"
         ]);
         echo $this->viewer->render("Products/new.php");
@@ -75,14 +77,14 @@ class Products
             "description" => $_POST["description"]
         ];
 
-        if($this->model->insert($data)){
+        if ($this->model->insert($data)) {
             header("Location: /products/{$this->model->getInsertID()}/show");
             exit;
-        }else{
-            echo $this->viewer->render("shared/header.php",[
+        } else {
+            echo $this->viewer->render("shared/header.php", [
                 "title" => "New Product"
             ]);
-            echo $this->viewer->render("Products/new.php",[
+            echo $this->viewer->render("Products/new.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $data
             ]);
@@ -95,14 +97,14 @@ class Products
         $product["name"] = $_POST["name"];
         $product["description"] = $_POST["description"];
 
-        if($this->model->update($id,$product)){
+        if ($this->model->update($id, $product)) {
             header("Location: /products/{$id}/show");
             exit;
-        }else{
-            echo $this->viewer->render("shared/header.php",[
+        } else {
+            echo $this->viewer->render("shared/header.php", [
                 "title" => "Edit Product"
             ]);
-            echo $this->viewer->render("Products/edit.php",[
+            echo $this->viewer->render("Products/edit.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $product
             ]);
@@ -112,17 +114,24 @@ class Products
     {
         $product = $this->getProduct($id);
 
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $this->model->delete($id);
             header("Location: /products");
             exit;
         }
 
-        echo $this->viewer->render("shared/header.php",[
+        echo $this->viewer->render("shared/header.php", [
             "title" => "Delete Product"
         ]);
-        echo $this->viewer->render("Products/delete.php",[
+        echo $this->viewer->render("Products/delete.php", [
             "product" => $product
         ]);
+    }
+    public function destroy(string $id)
+    {
+        $product = $this->getProduct($id);
+        $this->model->delete($id);
+        header("Location: /products/index");
+        exit;
     }
 }

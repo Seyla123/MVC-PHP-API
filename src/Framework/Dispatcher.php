@@ -24,6 +24,8 @@ class Dispatcher
         $controller = $this->getControllerName($params);
 
         $controller_object = $this->container->get($controller);
+
+        $controller_object->setRequest($request);
         
         $args = $this->getActionArguments($controller, $action, $params);
 

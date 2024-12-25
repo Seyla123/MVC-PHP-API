@@ -15,7 +15,41 @@ abstract class Model
         if(!empty($this->errors)) {
             return false;
         };
-        return true;
+        $sql = "UPDATE {$this->getTable()}";
+
+        unset($data["id"]);
+
+        $assignments = array_keys($data);
+
+        array_walk($assignments, function (&$value){
+           $value = "$value = ?"; 
+        });
+
+        $sql .= " SET " . implode(", ", $assignments);
+
+        $sql .= " WHERE id = ?";
+
+        $conn = $this->database->getConnection();
+        $stmt = $conn->prepare($sql);
+
+        $i=1;
+
+        foreach($data as $value) {
+            $type = match(gettype($value)) {
+                "NULL" => PDO::PARAM_NULL,
+                "integer" => PDO::PARAM_INT,
+                "boolean" => PDO::PARAM_BOOL,
+                default => PDO::PARAM_STR
+            };
+            $stmt->bindValue($i, $value, $type);
+            $i++;
+        }
+
+        $stmt->bindValue($i, $id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+        exit($sql);
     }
     public function getInsertID():string 
     {

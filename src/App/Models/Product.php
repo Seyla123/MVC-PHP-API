@@ -9,7 +9,7 @@ class Product
     {
         
     }
-    public function getData(): array
+    public function findAll(): array
     {
         $pdo = $this->database->getConnection();
         $stmt = $pdo->query("SELECT * FROM product");

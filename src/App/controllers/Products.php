@@ -11,7 +11,7 @@ class Products
     public function __construct(private Viewer $viewer, private Product $model){}
     public function index(): void
     {
-        $products = $this->model->getData();
+        $products = $this->model->findAll();
 
         echo $this->viewer->render("shared/header.php",[
             "title" => "Products"

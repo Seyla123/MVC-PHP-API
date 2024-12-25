@@ -17,7 +17,8 @@ class Products
             "title" => "Products"
         ]);
         echo $this->viewer->render("Products/index.php", [
-            "products"=> $products
+            "products"=> $products,
+            "total"=> $this->model->getTotal()
         ]);
     }
     public function show(string $id): void

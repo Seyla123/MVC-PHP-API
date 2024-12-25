@@ -11,7 +11,7 @@ use Framework\Controller;
 
 class Products extends Controller
 {
-    public function __construct(private Viewer $viewer, private Product $model) {}
+    public function __construct(private Product $model) {}
     public function index(): void
     {
         $products = $this->model->findAll();

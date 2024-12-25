@@ -10,7 +10,7 @@ class Dispatcher
     public function __construct(private Router $router, private Container $container)
     {
     }
-    public function handle(string $path, string $method): void
+    public function handle(Request $request): void
     {
         $params = $this->router->match($path, $method);
 

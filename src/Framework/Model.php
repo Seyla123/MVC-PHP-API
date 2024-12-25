@@ -5,6 +5,7 @@ use PDO;
 use App\Database;
 abstract class Model
 {
+    protected $table;
     public function __construct(private Database $database)
     {
         
@@ -12,14 +13,15 @@ abstract class Model
     public function findAll(): array
     {
         $pdo = $this->database->getConnection();
-        $stmt = $pdo->query("SELECT * FROM product");
+        $sql = "SELECT * FROM {$this->table}";
+        $stmt = $pdo->query($sql);
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $products;
     }
     public function find(string $id): array|bool
     {
         $conn = $this->database->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM product WHERE id = :id");
+        $stmt = $conn->prepare("SELECT * FROM {$this->table} WHERE id = :id");
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);

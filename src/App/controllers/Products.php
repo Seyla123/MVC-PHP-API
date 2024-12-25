@@ -7,10 +7,11 @@ namespace App\controllers;
 use App\Models\Product;
 use Framework\Viewer;
 use Framework\Exceptions\PageNotFoundException;
+use Framework\Controller;
 
-class Products
+class Products extends Controller
 {
-    public function __construct(private Viewer $viewer, private Product $model) {}
+    public function __construct(private Product $model) {}
     public function index(): void
     {
         $products = $this->model->findAll();
@@ -73,8 +74,8 @@ class Products
     public function create()
     {
         $data = [
-            "name" => $_POST["name"],
-            "description" => $_POST["description"]
+            "name" => $this->request->post["name"],
+            "description" => $this->request->post["description"]
         ];
 
         if ($this->model->insert($data)) {
@@ -94,8 +95,8 @@ class Products
     {
         $product = $this->getProduct($id);
 
-        $product["name"] = $_POST["name"];
-        $product["description"] = $_POST["description"];
+        $product["name"] = $this->request->post["name"];
+        $product["description"] = $this->request->post["description"];
 
         if ($this->model->update($id, $product)) {
             header("Location: /products/{$id}/show");

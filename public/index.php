@@ -15,13 +15,6 @@
     set_error_handler("Framework\ErrorHandler::handleError");
 
     set_exception_handler("Framework\ErrorHandler::handleException");
-    
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-    if($path === false){
-        throw new UnexpectedValueException("Malformed URL:
-                                            '{$_SERVER['REQUEST_URI']}'");
-    }
 
     $router = require ROOT_PATH . "/config/routes.php";
 
@@ -29,4 +22,5 @@
 
     $dispatcher = new Framework\Dispatcher($router, $container);
     
-    $dispatcher->handle($path, $_SERVER['REQUEST_METHOD']);
+    $request = Framework\Request::createFromGlobals();
+    $dispatcher->handle($request);

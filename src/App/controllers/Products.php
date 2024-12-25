@@ -53,8 +53,15 @@ class Products
             "description" => $_POST["description"]
         ];
 
-        var_dump($this->model->insert($data));
-
-        print_r($this->model->getErrors());
+        if($this->model->insert($data)){
+            echo "Records inserted successfully.";
+        }else{
+            echo $this->viewer->render("shared/header.php",[
+                "title" => "New Product"
+            ]);
+            echo $this->viewer->render("Products/new.php",[
+                "errors" => $this->model->getErrors()
+            ]);
+        }
     }
 }

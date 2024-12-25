@@ -34,12 +34,14 @@ abstract class Model
     }
     public function insert(array $data): bool
     {
+        if(!$this->validate($data)){
+            return false;
+        };
         $columns = implode(", ", array_keys($data));
         $placeholder = implode(", ", array_fill(0, count($data), "?"));
 
         $sql = "INSERT INTO {$this->getTable()} ($columns) VALUES ($placeholder)";
 
-        exit($sql);
         $conn = $this->database->getConnection();
         $stmt = $conn->prepare($sql);
 
@@ -55,7 +57,7 @@ abstract class Model
             $stmt->bindValue($i, $value, $type);
             $i++;
         }
-        
+
         return $stmt->execute();
     }
 }

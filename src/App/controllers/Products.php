@@ -17,7 +17,8 @@ class Products
             "title" => "Products"
         ]);
         echo $this->viewer->render("Products/index.php", [
-            "products"=> $products
+            "products"=> $products,
+            "total"=> $this->model->getTotal()
         ]);
     }
     public function show(string $id): void
@@ -106,5 +107,22 @@ class Products
                 "product" => $product
             ]);
         }
+    }
+    public function delete(string $id)
+    {
+        $product = $this->getProduct($id);
+
+        if($_SERVER["REQUEST_METHOD"] === "POST") {
+            $this->model->delete($id);
+            header("Location: /products");
+            exit;
+        }
+
+        echo $this->viewer->render("shared/header.php",[
+            "title" => "Delete Product"
+        ]);
+        echo $this->viewer->render("Products/delete.php",[
+            "product" => $product
+        ]);
     }
 }

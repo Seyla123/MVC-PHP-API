@@ -1,7 +1,7 @@
 <?php 
 declare(strict_types=1);
 namespace Framework;
-class MVCTemplateViewer
+class MVCTemplateViewer implements TemplateViewerInterface
 {
     public function render(string $template, array $data=[]): string
     {

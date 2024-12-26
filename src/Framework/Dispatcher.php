@@ -8,7 +8,9 @@ use UnexpectedValueException;
 
 class Dispatcher
 {
-    public function __construct(private Router $router, private Container $container)
+    public function __construct(private Router $router, 
+                                private Container $container,
+                                private array $middleware_classes)
     {
     }
     public function handle(Request $request): Response
@@ -31,14 +33,22 @@ class Dispatcher
         $args = $this->getActionArguments($controller, $action, $params);
 
         $controller_handler = new ControllerRequestHandler($controller_object, $action, $args);
-        $middleware = $this->container->get(\App\Middleware\ChangeResponseExample::class);
-        $middleware2 = $this->container->get(\App\Middleware\ChangeRequestExample::class);
-        $middleware = new MiddlewareRequestHandler([$middleware2, 
-                                                    $middleware,
+        $middleware = $this->getMiddleware($params);
+        print_r($middleware);
+        exit;
+        $middleware = new MiddlewareRequestHandler([$middleware, 
                                                     clone $middleware,
                                                     clone $middleware],
                                                     $controller_handler);
         return $middleware->handle($request);
+    }
+    private function getMiddleware(array $params): array
+    {
+        if(!array_key_exists("middleware", $params)){
+            return [];
+        }
+        $middleware = explode("|", $params["middleware"]);
+        return $middleware;
     }
     private function getActionArguments(string $controller, string $action, array $params ):array
     {

@@ -8,7 +8,7 @@
 
 <form method="post" action="/products/create">
 
-<?php require dirname(__DIR__) . "/views/Products/form.php"; ?>
+<?php require dirname(__DIR__) . "/views/Products/form.mvc.php"; ?>
 
 </form>
 

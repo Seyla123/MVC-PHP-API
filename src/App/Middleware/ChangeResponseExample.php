@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Middleware;
 use Framework\Request;
 use Framework\RequestHanlderInterface;
+use Framework\Response;
 
 class ChangeResponseExample
 {

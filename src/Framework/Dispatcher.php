@@ -32,7 +32,10 @@ class Dispatcher
 
         $controller_handler = new ControllerRequestHandler($controller_object, $action, $args);
         $middleware = $this->container->get(\App\Middleware\ChangeResponseExample::class);
-        $middleware = new MiddlewareRequestHandler([$middleware], $controller_handler);
+        $middleware = new MiddlewareRequestHandler([$middleware, 
+                                                    clone $middleware,
+                                                    clone $middleware],
+                                                    $controller_handler);
         return $middleware->handle($request);
     }
     private function getActionArguments(string $controller, string $action, array $params ):array

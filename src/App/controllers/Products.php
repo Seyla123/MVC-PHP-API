@@ -7,11 +7,12 @@ namespace App\controllers;
 use App\Models\Product;
 use Framework\Exceptions\PageNotFoundException;
 use Framework\Controller;
+use Framework\Response;
 
 class Products extends Controller
 {
     public function __construct(private Product $model) {}
-    public function index(): void
+    public function index(): Response
     {
         $products = $this->model->findAll();
 
@@ -20,7 +21,7 @@ class Products extends Controller
             "total" => $this->model->getTotal()
         ]));
 
-        $this->response->send();
+        return $this->response;
     }
     public function show(string $id): void
     {

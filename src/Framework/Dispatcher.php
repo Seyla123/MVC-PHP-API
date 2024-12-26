@@ -11,7 +11,7 @@ class Dispatcher
     public function __construct(private Router $router, private Container $container)
     {
     }
-    public function handle(Request $request): void
+    public function handle(Request $request): Response
     {
         $path = $this->getPath($request->uri);
         $params = $this->router->match($path, $request->method);
@@ -31,7 +31,7 @@ class Dispatcher
         
         $args = $this->getActionArguments($controller, $action, $params);
 
-        $controller_object->$action(...$args);
+        return $controller_object->$action(...$args);
     }
     private function getActionArguments(string $controller, string $action, array $params ):array
     {

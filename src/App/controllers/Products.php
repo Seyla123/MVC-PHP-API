@@ -15,13 +15,13 @@ class Products extends Controller
     public function index(): Response
     {
         $products = $this->model->findAll();
-        
+
         return $this->view("Products/index.mvc.php", [
             "products" => $products,
             "total" => $this->model->getTotal()
         ]);
     }
-    public function show(string $id): void
+    public function show(string $id): Response
     {
         $product = $this->model->find($id);
 
@@ -29,15 +29,15 @@ class Products extends Controller
             throw new PageNotFoundException("Product with id '$id' not found.");
         }
 
-        echo $this->viewer->render("Products/show.mvc.php", [
+        return $this->view("Products/show.mvc.php", [
             "product" => $product
         ]);
     }
-    public function edit(string $id): void
+    public function edit(string $id): Response
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render("Products/edit.mvc.php", [
+        return $this->view("Products/edit.mvc.php", [
             "product" => $product
         ]);
     }
@@ -55,11 +55,11 @@ class Products extends Controller
     {
         echo $title, " ", $id, " ", $page;
     }
-    public function new()
+    public function new(): Response
     {
-        echo $this->viewer->render("Products/new.mvc.php");
+        return $this->view("Products/new.mvc.php");
     }
-    public function create()
+    public function create(): Response
     {
         $data = [
             "name" => $this->request->post["name"],
@@ -70,13 +70,13 @@ class Products extends Controller
             header("Location: /products/{$this->model->getInsertID()}/show");
             exit;
         } else {
-            echo $this->viewer->render("Products/new.mvc.php", [
+            return $this->view("Products/new.mvc.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $data
             ]);
         }
     }
-    public function update(string $id)
+    public function update(string $id): Response
     {
         $product = $this->getProduct($id);
 
@@ -88,13 +88,13 @@ class Products extends Controller
             exit;
         } else {
             print_r($this->model->getErrors());
-            echo $this->viewer->render("Products/edit.mvc.php", [
+            return $this->view("Products/edit.mvc.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $product
             ]);
         }
     }
-    public function delete(string $id)
+    public function delete(string $id):Response
     {
         $product = $this->getProduct($id);
 
@@ -104,11 +104,11 @@ class Products extends Controller
             exit;
         }
 
-        echo $this->viewer->render("Products/delete.mvc.php", [
+        return $this->view("Products/delete.mvc.php", [
             "product" => $product
         ]);
     }
-    public function destroy(string $id)
+    public function destroy(string $id): Response
     {
         $product = $this->getProduct($id);
         $this->model->delete($id);

@@ -59,10 +59,7 @@ class Products extends Controller
     }
     public function new()
     {
-        echo $this->viewer->render("shared/header.php", [
-            "title" => "New Product"
-        ]);
-        echo $this->viewer->render("Products/new.php");
+        echo $this->viewer->render("Products/new.mvc.php");
     }
     public function create()
     {
@@ -75,10 +72,7 @@ class Products extends Controller
             header("Location: /products/{$this->model->getInsertID()}/show");
             exit;
         } else {
-            echo $this->viewer->render("shared/header.php", [
-                "title" => "New Product"
-            ]);
-            echo $this->viewer->render("Products/new.php", [
+            echo $this->viewer->render("Products/new.mvc.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $data
             ]);

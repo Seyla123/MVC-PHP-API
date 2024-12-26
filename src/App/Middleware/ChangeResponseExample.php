@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 use Framework\Request;
+use Framework\RequestHanlderInterface;
+
 class ChangeResponseExample
 {
-    public function process(Request $request, $next): Response
+    public function process(Request $request,RequestHanlderInterface $next): Response
     {
         $response = $next->handle($request);
 

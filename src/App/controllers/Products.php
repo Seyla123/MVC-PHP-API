@@ -15,13 +15,11 @@ class Products extends Controller
     public function index(): Response
     {
         $products = $this->model->findAll();
-
-        $this->response->setBody( $this->viewer->render("Products/index.mvc.php", [
+        
+        return $this->view("Products/index.mvc.php", [
             "products" => $products,
             "total" => $this->model->getTotal()
-        ]));
-
-        return $this->response;
+        ]);
     }
     public function show(string $id): void
     {

@@ -7,20 +7,21 @@ namespace App\controllers;
 use App\Models\Product;
 use Framework\Exceptions\PageNotFoundException;
 use Framework\Controller;
+use Framework\Response;
 
 class Products extends Controller
 {
     public function __construct(private Product $model) {}
-    public function index(): void
+    public function index(): Response
     {
         $products = $this->model->findAll();
 
-        echo $this->viewer->render("Products/index.mvc.php", [
+        return $this->view("Products/index.mvc.php", [
             "products" => $products,
             "total" => $this->model->getTotal()
         ]);
     }
-    public function show(string $id): void
+    public function show(string $id): Response
     {
         $product = $this->model->find($id);
 
@@ -28,15 +29,15 @@ class Products extends Controller
             throw new PageNotFoundException("Product with id '$id' not found.");
         }
 
-        echo $this->viewer->render("Products/show.mvc.php", [
+        return $this->view("Products/show.mvc.php", [
             "product" => $product
         ]);
     }
-    public function edit(string $id): void
+    public function edit(string $id): Response
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render("Products/edit.mvc.php", [
+        return $this->view("Products/edit.mvc.php", [
             "product" => $product
         ]);
     }
@@ -54,11 +55,11 @@ class Products extends Controller
     {
         echo $title, " ", $id, " ", $page;
     }
-    public function new()
+    public function new(): Response
     {
-        echo $this->viewer->render("Products/new.mvc.php");
+        return $this->view("Products/new.mvc.php");
     }
-    public function create()
+    public function create(): Response
     {
         $data = [
             "name" => $this->request->post["name"],
@@ -66,16 +67,15 @@ class Products extends Controller
         ];
 
         if ($this->model->insert($data)) {
-            header("Location: /products/{$this->model->getInsertID()}/show");
-            exit;
+            return $this->redirect("/products/{$this->model->getInsertID()}/show");
         } else {
-            echo $this->viewer->render("Products/new.mvc.php", [
+            return $this->view("Products/new.mvc.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $data
             ]);
         }
     }
-    public function update(string $id)
+    public function update(string $id): Response
     {
         $product = $this->getProduct($id);
 
@@ -83,35 +83,37 @@ class Products extends Controller
         $product["description"] = $this->request->post["description"];
 
         if ($this->model->update($id, $product)) {
-            header("Location: /products/{$id}/show");
-            exit;
+            return $this->redirect("/products/{$id}/show");
         } else {
-            print_r($this->model->getErrors());
-            echo $this->viewer->render("Products/edit.mvc.php", [
+            return $this->view("Products/edit.mvc.php", [
                 "errors" => $this->model->getErrors(),
                 "product" => $product
             ]);
         }
     }
-    public function delete(string $id)
+    public function delete(string $id): Response
     {
         $product = $this->getProduct($id);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $this->model->delete($id);
-            header("Location: /products");
-            exit;
+            return $this->redirect("/products");
         }
 
-        echo $this->viewer->render("Products/delete.mvc.php", [
+        return $this->view("Products/delete.mvc.php", [
             "product" => $product
         ]);
     }
-    public function destroy(string $id)
+    public function destroy(string $id): Response
     {
         $product = $this->getProduct($id);
         $this->model->delete($id);
-        header("Location: /products/index");
-        exit;
+        return $this->redirect("/products/index");
+    }
+    public function responseCodeExample(): Response
+    {
+        $this->response->setStatusCode(451);
+        $this->response->setBody("451 Unavailable For Legal Reasons");
+        return $this->response;
     }
 }

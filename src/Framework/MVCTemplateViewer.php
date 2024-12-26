@@ -5,7 +5,17 @@ class MVCTemplateViewer implements TemplateViewerInterface
 {
     public function render(string $template, array $data=[]): string
     {
-        $code = file_get_contents(dirname(__DIR__) . "/views/$template");
+        $views_dir = dirname(__DIR__) . "/views/";
+        $code = file_get_contents($views_dir . $template);
+
+        if(preg_match('#^{% extends "(?<template>.*)" %}#', $code, $matches)===1){
+            $base = file_get_contents($views_dir . $matches["template"]);
+
+            $block = $this->getBlock($code);
+            print_r($block);
+            exit;
+        }
+
         $code = $this->replaceVariables($code);
         $code = $this->replacePHP($code);
         extract($data, EXTR_SKIP);
@@ -20,5 +30,10 @@ class MVCTemplateViewer implements TemplateViewerInterface
     private function replacePHP(string $code): string
     {
         return preg_replace("#{%\s*(.+)\s*%}#", "<?php $1 ?>", $code);
+    }
+    private function getBlock(string $code): array
+    {
+        preg_match_all("#{% block (?<name>\w+) %}(?<content>.*){% endblock %}#", $code, $matches, PREG_SET_ORDER);
+        return $matches;
     }
 }

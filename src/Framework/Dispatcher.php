@@ -34,12 +34,8 @@ class Dispatcher
 
         $controller_handler = new ControllerRequestHandler($controller_object, $action, $args);
         $middleware = $this->getMiddleware($params);
-        print_r($middleware);
-        exit;
-        $middleware = new MiddlewareRequestHandler([$middleware, 
-                                                    clone $middleware,
-                                                    clone $middleware],
-                                                    $controller_handler);
+
+        $middleware = new MiddlewareRequestHandler($middleware,$controller_handler);
         return $middleware->handle($request);
     }
     private function getMiddleware(array $params): array
@@ -48,6 +44,12 @@ class Dispatcher
             return [];
         }
         $middleware = explode("|", $params["middleware"]);
+        array_walk($middleware, function (&$value){
+            if(! array_key_exists($value, $this->middleware_classes)){
+                throw new UnexpectedValueException("Middleware '$value' not found in config settings");
+            }
+            $value = $this->container->get($this->middleware_classes[$value]);
+        });
         return $middleware;
     }
     private function getActionArguments(string $controller, string $action, array $params ):array

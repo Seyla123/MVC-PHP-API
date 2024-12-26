@@ -16,7 +16,6 @@ class Products extends Controller
         $products = $this->model->findAll();
 
         echo $this->viewer->render("Products/index.mvc.php", [
-            "title" => "Products",
             "products" => $products,
             "total" => $this->model->getTotal()
         ]);
@@ -29,10 +28,7 @@ class Products extends Controller
             throw new PageNotFoundException("Product with id '$id' not found.");
         }
 
-        echo $this->viewer->render("shared/header.php", [
-            "title" => "Products"
-        ]);
-        echo $this->viewer->render("Products/show.php", [
+        echo $this->viewer->render("Products/show.mvc.php", [
             "product" => $product
         ]);
     }
